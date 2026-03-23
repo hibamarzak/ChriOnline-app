@@ -9,7 +9,8 @@ public class User {
     private String adresse;
     private String telephone;
     private boolean actif;
-
+    
+    // definir les methodes 
     public User() {}
 
     public User(int id, String username, String email, String password, String role) {
@@ -60,6 +61,7 @@ public class User {
     public boolean isActif() { return actif; }
     public void setActif(boolean newActif) { actif = newActif; }
 
+    // afficher les informations de l’objet User
     @Override
     public String toString() {
         return "User{id=" + id + ", username='" + username + "', email='" + email + "', role='" + role + "'}";
