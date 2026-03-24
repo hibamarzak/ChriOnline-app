@@ -21,7 +21,7 @@ public class AuthService {
         if (requete == null || requete.isEmpty()) {
             return "ERREUR:Requête vide";
         }
-
+// cette ligne sert a decouper la requete en morcaux en utilisant [:] pour separer 
         String[] parts = requete.split(":");
 
         switch (parts[0].toUpperCase()) {
@@ -36,10 +36,8 @@ public class AuthService {
         }
     }
 
-    /**
-     * Traite une demande de connexion
-     * Format: LOGIN:email:password
-     */
+    // Traite une demande de connexion Format: LOGIN:email:password
+    
     private String traiterLogin(String[] parts) {
         if (parts.length < 3) {
             return "ERREUR:Format invalide. Attendu: LOGIN:email:password";
@@ -52,26 +50,26 @@ public class AuthService {
         if (email.isEmpty() || password.isEmpty()) {
             return "ERREUR:Email ou mot de passe vide";
         }
-
+// Demande à UserDAO de vérifier dans la BD si cet email et le mot de passe existent. Retourne un User si trouvé, null sinon.
         User user = userDAO.authenticate(email, password);
 
         if (user != null) {
-            // Retourner les infos de l'utilisateur au client
+            
+          
+          // Retourner les infos de l'utilisateur au client
             return "LOGIN_OK:" + user.getId() + ":" + user.getUsername() + ":" + user.getRole();
         } else {
             return "ERREUR:Email ou mot de passe incorrect";
         }
     }
 
-    /**
-     * Traite une demande d'enregistrement
-     * Format: REGISTER:username:email:password
-     */
+    // Traite une demande d'enregistrement Format: REGISTER:username:email:password
+     
     private String traiterRegister(String[] parts) {
         if (parts.length < 4) {
             return "ERREUR:Format invalide. Attendu: REGISTER:username:email:password";
         }
-
+// Extrait les 3 données de l'inscription depuis le tableau.
         String username = parts[1];
         String email    = parts[2];
         String password = parts[3];
@@ -86,8 +84,9 @@ public class AuthService {
         if (userDAO.findByEmail(email) != null) {
             return "ERREUR:Cet email est déjà utilisé";
         }
-
-        // Créer et sauvegarder le nouvel utilisateur
+        // Crée un nouvel objet User avec le rôle CLIENT par défaut (id=0 car la BD va générer l'id automatiquement), 
+        // puis le sauvegarde dans la BD.
+      
         User nouvelUser = new User(0, username, email, password, "CLIENT");
         boolean succes = userDAO.save(nouvelUser);
 
@@ -98,10 +97,8 @@ public class AuthService {
         }
     }
 
-    /**
-     * Valide les données d'inscription
-     * @return message d'erreur, ou null si tout est OK
-     */
+    // validation ou les messages d'erreur 
+  
     private String validerInscription(String username, String email, String password) {
         if (username == null || username.trim().isEmpty()) {
             return "Le nom d'utilisateur est obligatoire";
