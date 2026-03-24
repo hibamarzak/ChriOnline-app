@@ -18,7 +18,8 @@ public class UserDAO {
   
     public boolean save(User user) {
         String sql = "INSERT INTO users (username, email, password, role, adresse, telephone, actif) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+     // Requête SQL d'insertion. Les ? sont des paramètres qui seront remplis après — cela protège contre les injections SQL.
+       try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
@@ -26,7 +27,10 @@ public class UserDAO {
             stmt.setString(5, user.getAdresse());
             stmt.setString(6, user.getTelephone());
             stmt.setBoolean(7, user.isActif());
-
+// Prépare la requête SQL. RETURN_GENERATED_KEYS demande à la BD de retourner l'id auto-généré.
+// Exécute la requête. rows = nombre de lignes affectées (1 si succès, 0 si échec).
+// Si l'insertion a réussi, récupère l'id généré par la BD et le met à jour dans l'objet User. sinnon erreur 
+          
             int rows = stmt.executeUpdate();
             if (rows > 0) {
                 ResultSet keys = stmt.getGeneratedKeys();
